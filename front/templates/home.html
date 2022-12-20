@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+{% block title %} {% endblock %}
+
+
+
+{% block body %}
+
+
+    <div class="container" style="padding: 30px;width: 50%;">
+        <div class="row">
+            <div class="col md-12">
+                <div class="jumbotron p-3">
+                    <div class="ion-align-items-center">
+                        <form method = "POST" action="http://127.0.0.1:5002/api/createVideotheque">
+                            <div class="form-group col-md-10">
+                              <label for="exampleInputEmail1">Nom</label>
+                              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="nomP">
+                            </div>
+                            <div class="form-group col-md-10">
+                              <label for="exampleInputPassword1">Prenom</label>
+                              <input type="text" class="form-control" id="exampleInputPassword1" name="prenomP">
+                            </div>
+                            <div class="form-group col-md-10">
+                                <label for="exampleInputPassword1">Nom de la vidéothèque</label>
+                                <input type="text" class="form-control" id="exampleInputPassword1" name="filename">
+                            </div>
+                            <button class="btn btn-primary" onclick="send()">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    
+    </div>
+
+
+{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.6.2.js"></script>
+
+<script>
+    
+
+    function send() {
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('createVideo') }}",
+            data: {"name": "Jim"}
+        })
+    }
+
+
+</script>
