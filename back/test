@@ -1,0 +1,52 @@
+{
+    "proprietaire": {
+        "nom": "Camara",
+        "prenom": "kaka"
+    },
+    "films": [
+        {
+            "titre": "toto titre",
+            "annee": 2015,
+            "realisateur": {
+                "nom": "Dieng",
+                "prenom": "Abdou"
+            },
+            "acteurs": [
+                {
+                    "nom": "Conord",
+                    "prenom": "Mc"
+                },
+                {
+                    "nom": "Lolo",
+                    "prenom": "Lili"
+                },
+                {
+                    "nom": "HIHI",
+                    "prenom": "SAHA"
+                }
+            ]
+        },
+        {
+            "titre": "Loal titre normal",
+            "annee": 2010,
+            "realisateur": {
+                "nom": "Sall updated normal",
+                "prenom": "Abdou updated normal"
+            },
+            "acteurs": [
+                {
+                    "nom": "Boseman",
+                    "prenom": "Chadwick"
+                },
+                {
+                    "nom": "Uma",
+                    "prenom": "Thurman"
+                },
+                {
+                    "nom": "HIHI",
+                    "prenom": "SAHA"
+                }
+            ]
+        }
+    ]
+}

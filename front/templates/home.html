@@ -3,54 +3,75 @@
 
 {% block title %} {% endblock %}
 
-
-
 {% block body %}
 
+<div style="text-align: right;margin-right: 15%;color: brown;">
+    <h4>{{ data['proprietaire']['nom'] }}</h5>
+    <h4>{{ data['proprietaire']['prenom'] }}</h5>
+</div>
 
-    <div class="container" style="padding: 30px;width: 50%;">
+    <div class="container">
         <div class="row">
             <div class="col md-12">
                 <div class="jumbotron p-3">
-                    <div class="ion-align-items-center">
-                        <form method = "POST" action="http://127.0.0.1:5002/api/createVideotheque">
-                            <div class="form-group col-md-10">
-                              <label for="exampleInputEmail1">Nom</label>
-                              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="nomP">
-                            </div>
-                            <div class="form-group col-md-10">
-                              <label for="exampleInputPassword1">Prenom</label>
-                              <input type="text" class="form-control" id="exampleInputPassword1" name="prenomP">
-                            </div>
-                            <div class="form-group col-md-10">
-                                <label for="exampleInputPassword1">Nom de la vidéothèque</label>
-                                <input type="text" class="form-control" id="exampleInputPassword1" name="filename">
-                            </div>
-                            <button class="btn btn-primary" onclick="send()">Submit</button>
-                        </form>
-                    </div>
+                    <h2>Liste de vos <b>films</b>
+                        <button type="button" class="btn btn-success float-right"
+                                data-toggle="modal" data-target="#mymodal">Add new employee
+                        </button>
+                    </h2>
+
+                    {% with messages = get_flashed_messages() %}
+
+                        {% if messages %}
+
+                            {% for message in messages %}
+
+                                <div class="alert alert-success alert-dismissable" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                                        <span aria-hidden="true">x</span>
+                                    </button>
+
+                                    {{ message }}
+                                </div>
+
+                            {% endfor %}
+
+                        {% endif %}
+
+                    {% endwith %}
+
+
+                    <table class="table table-hover table-dark">
+                        <tr>
+                            <th>Titre</th>
+                            <th>Année</th>
+                            <th>Nom P</th>
+                            <th>Prénom P</th>
+                            <th>Actions</th>
+                        </tr>
+
+                        {% for datas in data['films'] %}
+
+
+                            <tr>
+                                <td>{{ datas['titre'] }}</td>
+                                <td>{{ datas['annee'] }}</td>
+                                <td>{{ datas['realisateur']['nom'] }}</td>
+                                <td>{{ datas['realisateur']['prenom'] }}</td>
+                                <td>
+                                    <a href="" class="btn btn-warning btn-xs" data-toggle="modal"
+                                    data-target="">Edit</a>
+                                    <a href="" class="btn btn-danger btn-xs"
+                                    onclick="return confirm('Are you sure to delete?')">Delete</a>
+                                </td>
+                            </tr>
+                        
+
+                        {% endfor %}
+                    </table>
                 </div>
             </div>
-
         </div>
-    
     </div>
 
-
 {% endblock %}
-
-<script src="https://code.jquery.com/jquery-3.6.2.js"></script>
-
-<script>
-    
-
-    function send() {
-        $.ajax({
-            type: "POST",
-            url: "{{ url_for('createVideo') }}",
-            data: {"name": "Jim"}
-        })
-    }
-
-
-</script>

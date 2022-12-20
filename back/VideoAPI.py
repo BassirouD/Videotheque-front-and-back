@@ -19,6 +19,7 @@ def create_videotheque():
             json.dump(items, f, indent=4)
         # file = open(f'{filename}', 'w')
         # file.writelines(items)
+        #localStorage.setItem('filename', filename)
 
         return redirect('http://127.0.0.1:5000/home')
         #return jsonify({'Sucess': 'File Created and writed!'})

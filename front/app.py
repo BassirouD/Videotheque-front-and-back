@@ -15,7 +15,7 @@ def createVideo():
         print('++++++++++++++++++++++++-----:', request.form)
 
 
-    r = requests.post('http://127.0.0.1:5002/api/createVideotheque')
+    r = requests.post('http://127.0.0.1:5001/api/createVideotheque')
     
     print('---------------------',r)
     print('----------form-----------', form)
@@ -23,9 +23,8 @@ def createVideo():
 
 @app.route('/home')
 def home():
-    r = requests.get('http://127.0.0.1:5002/api/getAllMovies/test')
+    r = requests.get('http://127.0.0.1:5001/api/getAllMovies/test')
     data = json.loads(r.content)
-
     print(data['proprietaire'])
 
     return render_template('home.html', data = data)
