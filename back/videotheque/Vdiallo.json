@@ -1,0 +1,17 @@
+{
+    "proprietaire": {
+        "nom": "diallo",
+        "prenom": "Bassirou"
+    },
+    "films": [
+        {
+            "titre": "toto",
+            "annee": "toto",
+            "realisateur": {
+                "nom": "toto",
+                "prenom": "toto"
+            },
+            "acteurs": "nom"
+        }
+    ]
+}

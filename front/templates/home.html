@@ -15,9 +15,7 @@
             <div class="col md-12">
                 <div class="jumbotron p-3">
                     <h2>Liste de vos <b>films</b>
-                        <button type="button" class="btn btn-success float-right"
-                                data-toggle="modal" data-target="#mymodal">Add new employee
-                        </button>
+                        <a href="{{ url_for('addmovie', filename=data['selected_videotheque']) }}" role="button">Add movie</a>
                     </h2>
 
                     {% with messages = get_flashed_messages() %}
@@ -50,22 +48,31 @@
                             <th>Actions</th>
                         </tr>
 
+                        
+
                         {% for datas in data['films'] %}
 
+                            {% if datas %}
 
-                            <tr>
-                                <td>{{ datas['titre'] }}</td>
-                                <td>{{ datas['annee'] }}</td>
-                                <td>{{ datas['realisateur']['nom'] }}</td>
-                                <td>{{ datas['realisateur']['prenom'] }}</td>
-                                <td>
-                                    <a href="" class="btn btn-warning btn-xs" data-toggle="modal"
-                                    data-target="">Edit</a>
-                                    <a href="" class="btn btn-danger btn-xs"
-                                    onclick="return confirm('Are you sure to delete?')">Delete</a>
-                                </td>
-                            </tr>
-                        
+                                <tr>
+                                    <td>{{ datas['titre'] }}</td>
+                                    <td>{{ datas['annee'] }}</td>
+                                    <td>{{ datas['realisateur']['nom'] }}</td>
+                                    <td>{{ datas['realisateur']['prenom'] }}</td>
+                                    <!--{% for acteur in datas['acteurs'] %}
+                                        <tr>
+                                            <td>acteur['prenom']</td>
+                                            <td>acteur['nom']</td>
+                                        </tr>
+                                    {% endfor%}-->
+                                    <td>
+                                        <a href="{{ url_for('detailsfilm', movieName=datas['titre']) }}" class="btn btn-warning btn-xs">Edit</a>
+                                        <a href="" class="btn btn-danger btn-xs"
+                                        onclick="return confirm('Are you sure to delete?')">Delete</a>
+                                    </td>
+                                </tr>
+
+                            {% endif %}
 
                         {% endfor %}
                     </table>

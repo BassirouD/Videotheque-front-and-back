@@ -33,18 +33,27 @@
             <div class="col md-12">
                 <div class="jumbotron p-3">
                     <div class="ion-align-items-center">
-                        <form method = "POST" action="{{ url_for('createVideo') }}">
+                        <form method = "POST" action="/addmovie/{{selected_videotheque}}">
                             <div class="form-group col-md-10">
-                              <label for="exampleInputEmail1">Nom</label>
-                              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="nomP">
+                              <label for="exampleInputEmail1">Titre</label>
+                              <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="titre">
                             </div>
                             <div class="form-group col-md-10">
-                              <label for="exampleInputPassword1">Prenom</label>
-                              <input type="text" class="form-control" id="exampleInputPassword1" name="prenomP">
+                              <label for="exampleInputPassword1">Année</label>
+                              <input type="text" class="form-control" id="exampleInputPassword1" name="annee">
                             </div>
                             <div class="form-group col-md-10">
-                                <label for="exampleInputPassword1">Nom de la vidéothèque</label>
-                                <input type="text" class="form-control" id="exampleInputPassword1" name="filename">
+                                <label for="exampleInputPassword1">Nom réalisateur</label>
+                                <input type="text" class="form-control" id="exampleInputPassword1" name="nomR">
+                            </div>
+                            <div class="form-group col-md-10">
+                                <label for="exampleInputPassword1">Prénom réalisateur</label>
+                                <input type="text" class="form-control" id="exampleInputPassword1" name="prenomR">
+                            </div>
+                            <div class="form-group col-md-10">
+                                <label for="exampleInputPassword1">Acteurs</label>
+                                <textarea type="text" class="form-control" id="exampleInputPassword1" name="acteurs"></textarea>
+                                Séparer par des tirets(-)
                             </div>
                             <button class="btn btn-primary" type="submit">Submit</button>
                         </form>
