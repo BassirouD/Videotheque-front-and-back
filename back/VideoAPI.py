@@ -11,18 +11,17 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 @app.route("/api/createVideotheque", methods=['POST'])
 def create_videotheque():
     try:
-        print(type(request))
-        print('REQUEST OK')
+        #print(type(request))
+        
         isExist = os.path.exists('videotheque/'+request.form['filename']+'.json')
-        print(isExist)
+        #print(isExist)
         if(isExist):
             data = {'Info': 'File already exists'}
             #return jsonify({'Info': 'File already exists!'})
             return Response('{"warning": "Videotheque already exists"}',status=400,mimetype="application/json")
             #return redirect('http://127.0.0.1:5000/')
         else:
-            print('REQUEST OKOK')
-            print('----------------Isexist------------------------>:',isExist)
+            #print('----------------Isexist------------------------>:',isExist)
             filename = request.form['filename']
             prenomP = request.form['prenomP']
             nomP = request.form['nomP']
@@ -56,9 +55,9 @@ def delete_videotheque():
 def get_data(filename):
     with open(f'videotheque/{filename}', 'r') as f:
         data = json.load(f)
-        for i in data:
-            print(i)
-        print(data)
+        #for i in data:
+        #    print(i)
+        #print(data)
         return Response(json.dumps(data), status=200, mimetype="application/json")
 
 
@@ -70,10 +69,11 @@ def add_data(filename):
         nomR = request.form['nomR']
         prenomR = request.form['prenomR']
         acteurs = request.form['acteurs']
+        print('Mes acteurs---------->',acteurs)
         
         with open(f'videotheque/{filename}', 'r') as f:
             data = json.load(f)
-            print(data['films'])
+            #print(data['films'])
 
         listFilms = data['films']
         films = {
@@ -90,7 +90,7 @@ def add_data(filename):
 
         return Response('{"success": "Movie added"}', status=201, mimetype="application/json")
     except Exception as e:
-        print(e)
+        #print(e)
         return jsonify({'Error': 'Invalid request'})
 
 

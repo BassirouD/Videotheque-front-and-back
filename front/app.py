@@ -25,7 +25,8 @@ def createVideo():
 
         if r.status_code == 201:
             flash('Vidéothèque créée avec success')
-            return redirect(url_for('home', filename=payload['filename']))
+            return redirect(url_for('getAllVideotheque'))
+            #return redirect(url_for('home', filename=payload['filename']))
         else:
             resp=json.loads(r.content.decode())
             flash(resp['warning'])
@@ -72,7 +73,7 @@ def addmovie(filename='test'):
             'annee': request.form['annee'], 
             'nomR': request.form['nomR'],
             'prenomR': request.form['prenomR'],
-            'acteurs': acteurs
+            'acteurs': request.form['acteurs']
         }
         r = requests.post('http://127.0.0.1:5001/api/addFilms/'+selected_videotheque,data=payload)
         print(r.content)

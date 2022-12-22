@@ -12,6 +12,46 @@
                 "prenom": "toto"
             },
             "acteurs": "nom"
+        },
+        {
+            "titre": "Lefilm",
+            "annee": "2006",
+            "realisateur": {
+                "nom": "Diallo",
+                "prenom": "Koula"
+            },
+            "acteurs": "nom"
+        },
+        {
+            "titre": "Lefilm2",
+            "annee": "2004",
+            "realisateur": {
+                "nom": "Diallo1",
+                "prenom": "toto1"
+            },
+            "acteurs": "sasa sasa-soso sese-lsls lsls"
+        },
+        {
+            "titre": "Loal titre",
+            "annee": 2006,
+            "realisateur": {
+                "nom": "Sall",
+                "prenom": "Abdou"
+            },
+            "acteurs": [
+                {
+                    "nom": "Boseman",
+                    "prenom": "Chadwick"
+                },
+                {
+                    "nom": "Uma",
+                    "prenom": "Thurman"
+                },
+                {
+                    "nom": "HIHI",
+                    "prenom": "SAHA"
+                }
+            ]
         }
     ]
 }

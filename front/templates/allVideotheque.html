@@ -37,6 +37,7 @@
                         <tr>
                             
                             <th>Nom </th>
+                            <th>Action </th>
                             
                         </tr>
 
@@ -49,6 +50,11 @@
                                             {{ videotheque }}
                                         </a>
                                     </td>
+                                    <td>
+                                        <a href="" class="btn btn-danger btn-xs"
+                                        onclick="return confirm('Are you sure to delete?')">Delete</a>
+                                    </td>
+                                    
                                 </tr>
 
                         {% endfor %}

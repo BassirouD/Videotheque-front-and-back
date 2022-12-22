@@ -15,7 +15,9 @@
             <div class="col md-12">
                 <div class="jumbotron p-3">
                     <h2>Liste de vos <b>films</b>
-                        <a href="{{ url_for('addmovie', filename=data['selected_videotheque']) }}" role="button">Add movie</a>
+                        <a href="{{ url_for('addmovie', filename=data['selected_videotheque']) }}" role="button" class="float-right">Ajout film</a>
+                        <!--<button type="button" class="btn btn-success float-right" (click)="{{ url_for('addmovie', filename=data['selected_videotheque']) }}">Ajout film
+                        </button>-->
                     </h2>
 
                     {% with messages = get_flashed_messages() %}
