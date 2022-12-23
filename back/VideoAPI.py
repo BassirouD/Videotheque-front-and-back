@@ -41,12 +41,14 @@ def create_videotheque():
         return jsonify({'Error': 'Invalid request'})
 
 
-@app.route("/api/deleteVideotheque", methods=['DELETE'])
-def delete_videotheque():
+@app.route("/api/deleteVideotheque/<filename>", methods=['DELETE'])
+def delete_videotheque(filename):
     try:
-        filename = request.json['filename']
+        print(filename)
+        #filename = request.json['filename']
         os.remove('videotheque/'+filename)
-        return "<p>File Deleted!</p>"
+        return Response('{"success": "File deleted successfully!"}',status=201,mimetype="application/json")
+        #return "<p>File Deleted!</p>"
     except Exception as e:
         return jsonify({'Error': 'Invalid request'})
 
@@ -64,7 +66,6 @@ def get_data(filename):
 @app.route("/api/addFilms/<filename>", methods=['POST'])
 def add_data(filename):
     try:
-        print('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOooooookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
         acteurs = list(map(
             lambda fullName: get_person_infos_from_fullname(fullName),
             request.form['acteurs'].split('-')))
@@ -75,8 +76,8 @@ def add_data(filename):
         prenomR = request.form['prenomR']
         #acteurs = request.json['acteurs']
 
-        print('Mes acteurs---------->',acteurs)
-        print('Type acteurs---------->',type(acteurs))
+        print('Mes acteurs---------->', acteurs)
+        print('Type acteurs---------->', type(acteurs))
         
         with open(f'videotheque/{filename}', 'r') as f:
             data = json.load(f)
@@ -112,14 +113,17 @@ def found_movie(filename):
         return jsonify({'Error': 'Invalid request'})
 
 
-@app.route("/api/deleteMovie/<filename>", methods=['DELETE'])
-def delete_movie(filename):
+@app.route("/api/deleteMovie/<filename>/<titre>", methods=['DELETE'])
+def delete_movie(filename, titre):
+    print('filename: ', filename)
+    print('titre: ', titre)
     try:
-        titre = request.json['titre']
+        #titre = request.json['titre']
         if titre != "":
-            with open(f'videotheque/{filename}.json', 'r') as f:
+            with open(f'videotheque/{filename}', 'r') as f:
                 data = json.load(f)
             f.close()
+
             listFilms = data['films']
 
             deletedict = [i for i in listFilms if not (i['titre'] == titre)]
@@ -128,10 +132,11 @@ def delete_movie(filename):
 
             print(deletedict)
 
-            with open(f'videotheque/{filename}.json', 'w') as f:
+            with open(f'videotheque/{filename}', 'w') as f:
                 json.dump(data, f, indent=4)
 
-            return jsonify({'Success': 'Movie deleted'})
+            return Response('{"success": "Movie deleted"}', status=201, mimetype="application/json")
+            #return jsonify({'Success': 'Movie deleted'})
         else:
             return jsonify({'Error': 'Champ ne doit pas être vide'})
     except Exception as e:

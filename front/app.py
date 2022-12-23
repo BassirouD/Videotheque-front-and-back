@@ -64,11 +64,11 @@ def get_person_infos_from_fullname(fullname:str):
 def addmovie(filename='test'):
     global selected_videotheque
     if request.method == 'POST':
-        acteurs = list(map(
-            lambda fullName: get_person_infos_from_fullname(fullName),
-            request.form['acteurs'].split('-')))
-        print(acteurs)
-        print('Type acteurs', type(acteurs))
+        #acteurs = list(map(
+            #lambda fullName: get_person_infos_from_fullname(fullName),
+            #request.form['acteurs'].split('-')))
+        #print(acteurs)
+        #print('Type acteurs', type(acteurs))
         payload = {
             'titre': request.form['titre'], 
             'annee': request.form['annee'], 
@@ -103,3 +103,19 @@ def select_videotheque(videotheque=''):
     if(videotheque in videotheques):
         selected_videotheque = videotheque
     return redirect(url_for('home', filename=videotheque))
+
+
+@app.route('/deletevideotheque/<filename>')
+def deletevideotheque(filename):
+    print('filename: ',filename)
+    r = requests.delete('http://127.0.0.1:5001/api/deleteVideotheque/'+filename)
+    print('r--->:',r)
+    return redirect(url_for('getAllVideotheque'))
+
+@app.route('/deletemovie/<filename>/<titre>')
+def deletemovie(filename, titre):
+    print('filename: ', filename)
+    print('titre: ', titre)
+    r = requests.delete('http://127.0.0.1:5001/api/deleteMovie/' + filename+ '/' + titre)
+    print('r--->:',r)
+    return redirect(url_for('home', filename=filename))

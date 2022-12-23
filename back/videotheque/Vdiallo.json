@@ -5,33 +5,6 @@
     },
     "films": [
         {
-            "titre": "toto",
-            "annee": "toto",
-            "realisateur": {
-                "nom": "toto",
-                "prenom": "toto"
-            },
-            "acteurs": "nom"
-        },
-        {
-            "titre": "Lefilm",
-            "annee": "2006",
-            "realisateur": {
-                "nom": "Diallo",
-                "prenom": "Koula"
-            },
-            "acteurs": "nom"
-        },
-        {
-            "titre": "Lefilm2",
-            "annee": "2004",
-            "realisateur": {
-                "nom": "Diallo1",
-                "prenom": "toto1"
-            },
-            "acteurs": "sasa sasa-soso sese-lsls lsls"
-        },
-        {
             "titre": "Loal titre",
             "annee": 2006,
             "realisateur": {
