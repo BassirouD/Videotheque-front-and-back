@@ -64,11 +64,17 @@ def get_data(filename):
 @app.route("/api/addFilms/<filename>", methods=['POST'])
 def add_data(filename):
     try:
+        print('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOooooookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
+        acteurs = list(map(
+            lambda fullName: get_person_infos_from_fullname(fullName),
+            request.form['acteurs'].split('-')))
+        
         titre = request.form['titre']
         annee = request.form['annee']
         nomR = request.form['nomR']
         prenomR = request.form['prenomR']
-        acteurs = request.form['acteurs']
+        #acteurs = request.json['acteurs']
+
         print('Mes acteurs---------->',acteurs)
         print('Type acteurs---------->',type(acteurs))
         
@@ -169,3 +175,8 @@ def getallvideotheque():
         return Response(json.dumps(videotheques), status=200, mimetype="application/json")
     except Exception as e:
         return jsonify({'Error': 'Invalid request'})
+
+
+def get_person_infos_from_fullname(fullname:str):
+    firstName, lastname = fullname.split(' ')
+    return {'nom': lastname, 'prenom': firstName}

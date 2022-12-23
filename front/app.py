@@ -76,7 +76,10 @@ def addmovie(filename='test'):
             'prenomR': request.form['prenomR'],
             'acteurs': request.form['acteurs']
         }
-        r = requests.post('http://127.0.0.1:5001/api/addFilms/'+selected_videotheque,data=payload)
+        r = requests.post('http://127.0.0.1:5001/api/addFilms/' + selected_videotheque,data=payload)
+
+        #headers = {'accept': 'application/json'}
+        #r = requests.post('http://127.0.0.1:5001/api/addFilms/' + selected_videotheque,json=acteurs)
         print(r.content)
         return redirect(url_for('home', filename=selected_videotheque))
     if request.method == 'GET':
