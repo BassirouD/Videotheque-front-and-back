@@ -5,11 +5,11 @@
     },
     "films": [
         {
-            "titre": "Loal titre",
-            "annee": 2006,
+            "titre": "Loal titre updated",
+            "annee": "2006 updated",
             "realisateur": {
-                "nom": "Sall",
-                "prenom": "Abdou"
+                "nom": "Sall updated",
+                "prenom": "Abdou updated"
             },
             "acteurs": [
                 {

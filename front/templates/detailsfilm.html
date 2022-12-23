@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col md-12">
                 <div class="jumbotron p-3">
-                    <h2>Détails de votre <b>film</b>
+                    <h2>Détails de votre film
                         
                     </h2>
 
@@ -33,32 +33,50 @@
 
                     {% endwith %}
 
-
-                    <table class="table table-hover table-dark">
-                        <tr>
-                            <th>Titre</th>
-                            <th>Année</th>
-                            <th>Nom P</th>
-                            <th>Prénom P</th>
-                            
-                    
-                        </tr>
-                        <tr>
-                            <td>{{ data['titre'] }}</td>
-                            <td>{{ data['annee'] }}</td>
-                            <td>{{ data['realisateur']['nom'] }}</td>
-                            <td>{{ data['realisateur']['prenom'] }}</td>
-                        </tr>
-                        <tr>
-                            <td>Acteurs</td>
-                            {% for acteur in data['acteurs'] %}
-                                <tr>
-                                    <td>{{ acteur['prenom'] }}</td>
-                                    <td>{{ acteur['nom'] }}</td>
-                                </tr>
-                            {% endfor%}
-                        </tr>
-                    </table>
+                    <form method = "POST" action="{{ url_for('updatemovie', filename=data['selected_videotheque'], titre=data['film']['titre']) }}">
+                        <table class="table table-hover table-dark">
+                            <tr>
+                                <th>Titre</th>
+                                <th>Année</th>
+                                <th>Nom P</th>
+                                <th>Prénom P</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" class="form-control" name="ntitre"
+                                                            value="{{ data['film']['titre'] }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="nannee"
+                                                            value="{{ data['film']['annee'] }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="nnomR"
+                                                            value="{{ data['film']['realisateur']['nom'] }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="nprenomR"
+                                                            value="{{ data['film']['realisateur']['prenom'] }}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h3><b>Acteurs</b></h2>
+                                </td>
+                                {% for acteur in data['film']['acteurs'] %}
+                                    <tr>
+                                        <td>
+                                            <input type="text" value="{{ acteur['prenom'] }}">
+                                        </td>
+                                        <td>
+                                            <input type="text" value="{{ acteur['nom'] }}">
+                                        </td>
+                                    </tr>
+                                {% endfor%}
+                            </tr>
+                        </table>
+                        <button class="btn btn-primary" type="submit">Modifier</button>
+                    </form>
                 </div>
             </div>
         </div>

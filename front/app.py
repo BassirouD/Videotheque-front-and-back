@@ -39,7 +39,6 @@ def createVideo():
 def home(filename='test'):
     global films
     global selected_videotheque
-    print(selected_videotheque)
     r = requests.get('http://127.0.0.1:5001/api/getAllMovies/'+filename)
     data = json.loads(r.content.decode())
     films = data['films']
@@ -51,10 +50,13 @@ def home(filename='test'):
 
 @app.route('/detailsfilm/<movieName>')
 def detailsfilm(movieName):
-    print(movieName)
+    global selected_videotheque
+    #print(selected_videotheque)
     for film in films:
-        if film['titre']==movieName:
-            return render_template('detailsfilm.html', data = film)
+        if film['titre'] == movieName:
+            data={'film':film, 'selected_videotheque':selected_videotheque}
+            print('data--->:',data)
+            return render_template('detailsfilm.html', data = data)
 
 def get_person_infos_from_fullname(fullname:str):
     firstName, lastname = fullname.split(' ')
@@ -80,7 +82,7 @@ def addmovie(filename='test'):
 
         #headers = {'accept': 'application/json'}
         #r = requests.post('http://127.0.0.1:5001/api/addFilms/' + selected_videotheque,json=acteurs)
-        print(r.content)
+        #print(r.content)
         return redirect(url_for('home', filename=selected_videotheque))
     if request.method == 'GET':
         return render_template('addmovie.html', selected_videotheque=selected_videotheque)
@@ -90,10 +92,10 @@ def addmovie(filename='test'):
 def getAllVideotheque():
     global videotheques
     r = requests.get('http://127.0.0.1:5001/api/getAllVideotheque')
-    print(r.content.decode())
+    #print(r.content.decode())
     data = json.loads(r.content.decode())
     videotheques = data
-    return render_template('allVideotheque.html', data= data)
+    return render_template('allVideotheque.html', data=data)
 
 @app.route('/select_videotheque/<videotheque>')
 def select_videotheque(videotheque=''):
@@ -107,15 +109,33 @@ def select_videotheque(videotheque=''):
 
 @app.route('/deletevideotheque/<filename>')
 def deletevideotheque(filename):
-    print('filename: ',filename)
+    #print('filename: ',filename)
     r = requests.delete('http://127.0.0.1:5001/api/deleteVideotheque/'+filename)
-    print('r--->:',r)
+    #print('r--->:',r)
     return redirect(url_for('getAllVideotheque'))
 
 @app.route('/deletemovie/<filename>/<titre>')
 def deletemovie(filename, titre):
+    #print('filename: ', filename)
+    #print('titre: ', titre)
+    r = requests.delete('http://127.0.0.1:5001/api/deleteMovie/' + filename+ '/' + titre)
+    #print('r--->:',r)
+    return redirect(url_for('home', filename=filename))
+
+
+@app.route('/updatemovie/<filename>/<titre>', methods=['GET','POST'])
+def updatemovie(filename='test', titre='test'):
     print('filename: ', filename)
     print('titre: ', titre)
-    r = requests.delete('http://127.0.0.1:5001/api/deleteMovie/' + filename+ '/' + titre)
-    print('r--->:',r)
+    payload = {
+        'ntitre': request.form['ntitre'], 
+        'nannee': request.form['nannee'], 
+        'nnomR': request.form['nnomR'], 
+        'nprenomR': request.form['nprenomR']
+    }
+    print('payload----->:',payload)
+    url='http://127.0.0.1:5001/api/updateMovie/'+filename+'/'+titre
+    print('url-->',url)
+    r = requests.post(url, data = payload)
+    print('r--->:',r.content)
     return redirect(url_for('home', filename=filename))

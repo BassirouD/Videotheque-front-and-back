@@ -143,34 +143,37 @@ def delete_movie(filename, titre):
         return jsonify({'Error': 'Invalid request'})
 
 
-@app.route("/api/updateMovie/<filename>", methods=['PUT'])
-def update_movie(filename):
+@app.route("/api/updateMovie/<filename>/<titre>", methods=['POST'])
+def update_movie(filename, titre):
+    print('filename: ', filename)
+    print('titre: ', titre)
     try:
-        title = request.json['title']
-        ntitre = request.json['ntitre']
-        nannee = request.json['nannee']
-        nnomR = request.json['nnomR']
-        nprenomR = request.json['nprenomR']
-        with open(f'videotheque/{filename}.json', 'r') as f:
+        #title = request.form['title']
+        ntitre = request.form['ntitre']
+        nannee = request.form['nannee']
+        nnomR = request.form['nnomR']
+        nprenomR = request.form['nprenomR']
+        with open(f'videotheque/{filename}', 'r') as f:
             data = json.load(f)
         f.close()
 
         listFilms = data['films']
 
-        datafound = [i for i in data['films'] if i['titre'] == title][0]
+        datafound = [i for i in data['films'] if i['titre'] == titre][0]
 
         datafound['titre'] = ntitre
         datafound['annee'] = nannee
         datafound['realisateur']['nom'] = nnomR
         datafound['realisateur']['prenom'] = nprenomR
 
-        with open(f'videotheque/{filename}.json', 'w') as f:
+        with open(f'videotheque/{filename}', 'w') as f:
             json.dump(data, f, indent=4)
 
-        return datafound
-
+        #return datafound
+        return Response('{"success": "Movie updated successfully!"}',status=201,mimetype="application/json")
     except Exception as e:
-        return jsonify({'Error': 'Invalid request'})
+        return Response('{"Error": "Invalid request!"}',status=404,mimetype="application/json")
+        #return jsonify({'Error': 'Invalid request'})
 
 
 @app.route("/api/getAllVideotheque", methods=['GET'])
