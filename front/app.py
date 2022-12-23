@@ -68,6 +68,7 @@ def addmovie(filename='test'):
             lambda fullName: get_person_infos_from_fullname(fullName),
             request.form['acteurs'].split('-')))
         print(acteurs)
+        print('Type acteurs', type(acteurs))
         payload = {
             'titre': request.form['titre'], 
             'annee': request.form['annee'], 

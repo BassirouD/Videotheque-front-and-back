@@ -70,6 +70,7 @@ def add_data(filename):
         prenomR = request.form['prenomR']
         acteurs = request.form['acteurs']
         print('Mes acteurs---------->',acteurs)
+        print('Type acteurs---------->',type(acteurs))
         
         with open(f'videotheque/{filename}', 'r') as f:
             data = json.load(f)

@@ -1,0 +1,17 @@
+{
+    "proprietaire": {
+        "nom": "diallo",
+        "prenom": "Bassirou"
+    },
+    "films": [
+        {
+            "titre": "toto",
+            "annee": "2005",
+            "realisateur": {
+                "nom": "Diallo5",
+                "prenom": "toto5"
+            },
+            "acteurs": "sasa sasa-soso sese-lsls lsls"
+        }
+    ]
+}
