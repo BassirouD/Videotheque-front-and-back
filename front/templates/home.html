@@ -5,6 +5,15 @@
 
 {% block body %}
 
+<form action="{{ url_for('searchmovie', filename=data['selected_videotheque']) }}", method="POST">
+    <div class="input-group rounded" style="margin-left: 14%;width: 40%;">
+        <input name="title" type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        <button type="submit" class="btn btn-warning">Chercher</button>   
+    </div>
+</form>
+
+
+
 <div style="text-align: right;margin-right: 15%;color: brown;">
     <h4>{{ data['proprietaire']['nom'] }}</h5>
     <h4>{{ data['proprietaire']['prenom'] }}</h5>

@@ -102,13 +102,15 @@ def add_data(filename):
         return jsonify({'Error': 'Invalid request'})
 
 
-@app.route("/api/foundMovie/<filename>", methods=['GET'])
+@app.route("/api/searchmovie/<filename>", methods=['POST'])
 def found_movie(filename):
     try:
-        movie = request.json['movie']
-        with open(f'videotheque/{filename}.json', 'r') as f:
+        movie = request.form['title']
+        with open(f'videotheque/{filename}', 'r') as f:
             data = json.load(f)
-            return [i for i in data['films'] if i['titre'] == movie][0]
+        searchResult = [i for i in data['films'] if i['titre'] == movie][0]
+        print(searchResult)
+        return Response(json.dumps(searchResult), status=200, mimetype="application/json")
     except Exception as e:
         return jsonify({'Error': 'Invalid request'})
 

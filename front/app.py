@@ -133,9 +133,22 @@ def updatemovie(filename='test', titre='test'):
         'nnomR': request.form['nnomR'], 
         'nprenomR': request.form['nprenomR']
     }
-    print('payload----->:',payload)
     url='http://127.0.0.1:5001/api/updateMovie/'+filename+'/'+titre
-    print('url-->',url)
     r = requests.post(url, data = payload)
-    print('r--->:',r.content)
     return redirect(url_for('home', filename=filename))
+
+@app.route('/searchmovie/<filename>',methods=['POST'])
+def searchmovie(filename='test',):
+    title = request.form['title'], 
+    print('filename: ', filename)
+    print('titre: ', title)
+    payload = {
+        'title': title, 
+    }
+    url='http://127.0.0.1:5001/api/searchmovie/'+filename
+    r = requests.post(url, data=payload)
+    data = json.loads(r.content.decode())
+    print('--------data--->:', data)
+    return render_template('search.html', data=data)
+
+

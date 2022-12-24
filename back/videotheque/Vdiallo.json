@@ -5,11 +5,11 @@
     },
     "films": [
         {
-            "titre": "Loal titre updated",
-            "annee": "2006 updated",
+            "titre": "Loal titre",
+            "annee": "2006",
             "realisateur": {
-                "nom": "Sall updated",
-                "prenom": "Abdou updated"
+                "nom": "Sall",
+                "prenom": "Abdou"
             },
             "acteurs": [
                 {
@@ -23,6 +23,24 @@
                 {
                     "nom": "HIHI",
                     "prenom": "SAHA"
+                }
+            ]
+        },
+        {
+            "titre": "Test search",
+            "annee": "1996",
+            "realisateur": {
+                "nom": "Diallo",
+                "prenom": "Koula"
+            },
+            "acteurs": [
+                {
+                    "nom": "aliou",
+                    "prenom": "sow"
+                },
+                {
+                    "nom": "Demba",
+                    "prenom": "Ka"
                 }
             ]
         }
