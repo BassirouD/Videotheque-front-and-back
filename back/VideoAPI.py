@@ -155,6 +155,8 @@ def update_movie(filename, titre):
         nannee = request.form['nannee']
         nnomR = request.form['nnomR']
         nprenomR = request.form['nprenomR']
+        
+
         with open(f'videotheque/{filename}', 'r') as f:
             data = json.load(f)
         f.close()

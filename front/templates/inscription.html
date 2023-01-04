@@ -7,23 +7,23 @@
 
 {% block body %}
 
-{% with messages = get_flashed_messages() %}
+{% with messages = get_flashed_messages(category_filter=["success"]) %}
 
-{% if messages %}
+    {% if messages %}
 
-    {% for message in messages %}
+        {% for message in messages %}
 
-        <div class="alert alert-success alert-dismissable" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="close">
-                <span aria-hidden="true">x</span>
-            </button>
+            <div class="alert alert-success alert-dismissable" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                    <span aria-hidden="true">x</span>
+                </button>
 
-            {{ message }}
-        </div>
+                {{ message }}
+            </div>
 
-    {% endfor %}
+        {% endfor %}
 
-{% endif %}
+    {% endif %}
 
 {% endwith %}
 
@@ -34,6 +34,13 @@
                 <div class="jumbotron p-3">
                     <div class="ion-align-items-center">
                         <form method = "POST" action="{{ url_for('createVideo') }}">
+                            {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                                {% if errors %}
+                                    {% for msg in errors %}
+                                        <p style="color: red;"><strong>{{ msg }}</strong>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
                             <div class="form-group col-md-10">
                               <label for="exampleInputEmail1">Nom</label>
                               <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="nomP">
@@ -49,8 +56,6 @@
                             <button class="btn btn-primary" type="submit">Submit</button>
                             <a role="button" href="{{ url_for('getAllVideotheque') }}" class="float-right btn btn-warning btn-xs">Aller aux vidéothèques</a>
                         </form>
-
-                        
                     </div>
                 </div>
             </div>

@@ -66,10 +66,10 @@
                                 {% for acteur in data['film']['acteurs'] %}
                                     <tr>
                                         <td>
-                                            <input type="text" value="{{ acteur['prenom'] }}">
+                                            <input type="text" value="{{ acteur['prenom'] }}" name="prenomA">
                                         </td>
                                         <td>
-                                            <input type="text" value="{{ acteur['nom'] }}">
+                                            <input type="text" value="{{ acteur['nom'] }}" name="nomA">
                                         </td>
                                     </tr>
                                 {% endfor%}
