@@ -6,7 +6,7 @@
     "films": [
         {
             "titre": "Loal titre",
-            "annee": "2006",
+            "annee": "2005",
             "realisateur": {
                 "nom": "Sall",
                 "prenom": "Abdou"
@@ -23,42 +23,6 @@
                 {
                     "nom": "HIHI",
                     "prenom": "SAHA"
-                }
-            ]
-        },
-        {
-            "titre": "Test search",
-            "annee": "1996",
-            "realisateur": {
-                "nom": "Diallo",
-                "prenom": "Koula"
-            },
-            "acteurs": [
-                {
-                    "nom": "aliou",
-                    "prenom": "sow"
-                },
-                {
-                    "nom": "Demba",
-                    "prenom": "Ka"
-                }
-            ]
-        },
-        {
-            "titre": "Test search",
-            "annee": "1996",
-            "realisateur": {
-                "nom": "Diallo",
-                "prenom": "Koula"
-            },
-            "acteurs": [
-                {
-                    "nom": "aliou",
-                    "prenom": "sow"
-                },
-                {
-                    "nom": "Demba",
-                    "prenom": "Ka"
                 }
             ]
         }

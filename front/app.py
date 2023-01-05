@@ -10,6 +10,7 @@ app.secret_key='Secret Key'
 films = []
 videotheques = []
 selected_videotheque = ''
+dataMovies = []
 
 @app.route('/')
 def inscription():
@@ -57,11 +58,12 @@ def createVideo():
 def home(filename='test'):
     global films
     global selected_videotheque
+    global dataMovies
     r = requests.get('http://127.0.0.1:5001/api/getAllMovies/'+filename)
     data = json.loads(r.content.decode())
     films = data['films']
+    dataMovies = data
     data['selected_videotheque'] = selected_videotheque
-    
     return render_template('home.html', data = data)
 
 
@@ -140,22 +142,38 @@ def deletemovie(filename, titre):
 
 @app.route('/searchmovie/<filename>',methods=['POST'])
 def searchmovie(filename='test',):
-    title = request.form['title'], 
+    global films
+    global selected_videotheque
+    global dataMovies
+    title = request.form['title'],
+    strTitle = ''.join(title)
     print('filename: ', filename)
     print('titre: ', title)
-    payload = {
-        'title': title, 
-    }
-    url='http://127.0.0.1:5001/api/searchmovieTest/'+filename
-    r = requests.post(url, data=payload)
-    data = json.loads(r.content.decode())
-    #print('--------data--->:', data)
-    if r.status_code == 200:
-        return render_template('search.html', data=data)
-    if r.status_code == 404:
-        print('---------------ici--------------------')
-        flash('No data found')
-        return render_template('home.html')
+    print('strTitle: ', strTitle)
+    print('type strTitle: ', type(strTitle))
+    print('type titre: ', type(title))
+    if strTitle:
+        payload = {
+            'title': strTitle, 
+        }
+        url='http://127.0.0.1:5001/api/searchmovieTest/'+filename
+        r = requests.post(url, data=payload)
+        data = json.loads(r.content.decode())
+        print('--------statuis--->:', r.status_code)
+        if r.status_code == 200:
+            return render_template('search.html', data=data)
+        if r.status_code == 404:
+            print('--------------404----------------------', dataMovies)
+            print('---------------ici--------------------')
+            r = requests.get('http://127.0.0.1:5001/api/getAllMovies/'+filename)
+            #data = json.loads(r.content.decode())
+            #films = data['films']
+            #data['selected_videotheque'] = selected_videotheque
+            flash('No data found', 'error')
+            return render_template('home.html', data = dataMovies)
+    else:
+        flash('Le champ ne doit pas être vide', 'info')
+        return render_template('home.html', data = dataMovies)
 
 
 
@@ -201,6 +219,7 @@ def updatemovie(filename='test', titre='test'):
     }
     url = 'http://127.0.0.1:5001/api/updateMovie/'+filename+'/'+titre
     r = requests.post(url, data = payload)
+    flash('Film modifié avec succès', 'success')
     return redirect(url_for('home', filename=filename))
 
 

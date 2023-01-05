@@ -134,17 +134,19 @@ def found_movie_test(filename):
         print(movie)
         with open(f'videotheque/{filename}', 'r') as f:
             data = json.load(f)
-        searchResultByTitle = [i for i in data['films'] if i['titre'] == movie][0]
+        #searchResultByTitle = [i for i in data['films'] if i['titre'] == movie][0]
         testList = list(filter(lambda movieList: movieList['titre'] == movie, data['films']))
-        print(movie,'-----------------------/')
+        print(testList,'-----------------------/')
         
-        print('----------------------------------------------------')
         
         if testList:
+            print('-----------200----------------')
             print('Case title')
             print(testList)
             return Response(json.dumps(testList), status=200, mimetype="application/json")
-        else:
+        if len(testList) == 0:
+            print('-----------404----------------')
+            return Response('{"Info": "No data!"}',status=404,mimetype="application/json")
             for movies in data['films']:
                 if movies['acteurs'][0]['nom'] == movie:
                     myList=movies
