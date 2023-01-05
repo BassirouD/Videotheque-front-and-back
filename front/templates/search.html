@@ -21,11 +21,15 @@
                             <th>Actions</th>
                         </tr>
 
+                        {% for datas in data %}
+
+                            {% if datas %}
+
                                 <tr>
-                                    <td>{{ data['titre'] }}</td>
-                                    <td>{{ data['annee'] }}</td>
-                                    <td>{{ data['realisateur']['nom'] }}</td>
-                                    <td>{{ data['realisateur']['prenom'] }}</td>
+                                    <td>{{ datas['titre'] }}</td>
+                                    <td>{{ datas['annee'] }}</td>
+                                    <td>{{ datas['realisateur']['nom'] }}</td>
+                                    <td>{{ datas['realisateur']['prenom'] }}</td>
                                 
                                     <td>
                                         <a href="" class="btn btn-warning btn-xs">Edit</a>
@@ -33,6 +37,10 @@
                                         onclick="return confirm('Are you sure to delete?')">Delete</a>
                                     </td>
                                 </tr>
+                            
+                            {% endif %}
+
+                        {% endfor %}
 
                     </table>
                 </div>

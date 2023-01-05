@@ -108,11 +108,59 @@ def found_movie(filename):
         movie = request.form['title']
         with open(f'videotheque/{filename}', 'r') as f:
             data = json.load(f)
-        searchResult = [i for i in data['films'] if i['titre'] == movie][0]
-        print(searchResult)
-        return Response(json.dumps(searchResult), status=200, mimetype="application/json")
+        searchResultByTitle = [i for i in data['films'] if i['titre'] == movie][0]
+        if searchResultByTitle:
+            print('Case title')
+            print(searchResultByTitle)
+            return Response(json.dumps(searchResultByTitle), status=200, mimetype="application/json")
+        else:
+            searchResultByActor = [i for i in data['films'] if i['acteurs']['nom'] == movie][0]
+            if searchResultByActor:
+                print('Case actor')
+                print(searchResultByActor)
+                return Response(json.dumps(searchResultByActor), status=200, mimetype="application/json")
+            else:
+                print('No DATA...')
+                return Response('{"Info": "No data!"}',status=404,mimetype="application/json")
+                #return Response(json.dumps(searchResultByActor), status=200, mimetype="application/json")
     except Exception as e:
         return jsonify({'Error': 'Invalid request'})
+
+
+@app.route("/api/searchmovieTest/<filename>", methods=['POST'])
+def found_movie_test(filename):
+    try:
+        movie = request.form['title']
+        print(movie)
+        with open(f'videotheque/{filename}', 'r') as f:
+            data = json.load(f)
+        searchResultByTitle = [i for i in data['films'] if i['titre'] == movie][0]
+        testList = list(filter(lambda movieList: movieList['titre'] == movie, data['films']))
+        print(movie,'-----------------------/')
+        
+        print('----------------------------------------------------')
+        
+        if testList:
+            print('Case title')
+            print(testList)
+            return Response(json.dumps(testList), status=200, mimetype="application/json")
+        else:
+            for movies in data['films']:
+                if movies['acteurs'][0]['nom'] == movie:
+                    myList=movies
+                    print('mysLise',myList)
+                print('Case actor')
+                print(myList)
+
+                if myList:
+                    return Response(json.dumps(myList), status=200, mimetype="application/json")
+            else:
+                print('No DATA...')
+                return Response('{"Info": "No data!"}',status=404,mimetype="application/json")
+                    #return Response(json.dumps(searchResultByActor), status=200, mimetype="application/json")
+    except Exception as e:
+        return jsonify({'Error': 'Invalid request'})
+
 
 
 @app.route("/api/deleteMovie/<filename>/<titre>", methods=['DELETE'])

@@ -104,7 +104,6 @@ def addmovie(filename='test'):
     if request.method == 'GET':
         return render_template('addmovie.html', selected_videotheque=selected_videotheque)
 
-
 @app.route('/getAllVideotheque')
 def getAllVideotheque():
     global videotheques
@@ -139,7 +138,6 @@ def deletemovie(filename, titre):
     #print('r--->:',r)
     return redirect(url_for('home', filename=filename))
 
-
 @app.route('/searchmovie/<filename>',methods=['POST'])
 def searchmovie(filename='test',):
     title = request.form['title'], 
@@ -148,11 +146,18 @@ def searchmovie(filename='test',):
     payload = {
         'title': title, 
     }
-    url='http://127.0.0.1:5001/api/searchmovie/'+filename
+    url='http://127.0.0.1:5001/api/searchmovieTest/'+filename
     r = requests.post(url, data=payload)
     data = json.loads(r.content.decode())
-    print('--------data--->:', data)
-    return render_template('search.html', data=data)
+    #print('--------data--->:', data)
+    if r.status_code == 200:
+        return render_template('search.html', data=data)
+    if r.status_code == 404:
+        print('---------------ici--------------------')
+        flash('No data found')
+        return render_template('home.html')
+
+
 
 
 def get_person_infos_from_tuple(list1, list2):
@@ -187,14 +192,14 @@ def updatemovie(filename='test', titre='test'):
 
     #acteurs=list(map(lambda l1, l2: get_person_infos_from_tuple(l1,l2),listnomA, listPrenomA))
     print(maListActeur)
-    print('---------------------------------------')
+    print('---------------------------------------------------------------------------------------------------------------------------------')
     payload = {
         'ntitre': request.form['ntitre'], 
         'nannee': request.form['nannee'], 
         'nnomR': request.form['nnomR'], 
         'nprenomR': request.form['nprenomR']
     }
-    url='http://127.0.0.1:5001/api/updateMovie/'+filename+'/'+titre
+    url = 'http://127.0.0.1:5001/api/updateMovie/'+filename+'/'+titre
     r = requests.post(url, data = payload)
     return redirect(url_for('home', filename=filename))
 

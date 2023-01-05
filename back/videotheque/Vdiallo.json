@@ -43,6 +43,24 @@
                     "prenom": "Ka"
                 }
             ]
+        },
+        {
+            "titre": "Test search",
+            "annee": "1996",
+            "realisateur": {
+                "nom": "Diallo",
+                "prenom": "Koula"
+            },
+            "acteurs": [
+                {
+                    "nom": "aliou",
+                    "prenom": "sow"
+                },
+                {
+                    "nom": "Demba",
+                    "prenom": "Ka"
+                }
+            ]
         }
     ]
 }
