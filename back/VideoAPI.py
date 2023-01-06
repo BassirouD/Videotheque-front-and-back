@@ -136,26 +136,26 @@ def found_movie_test(filename):
             data = json.load(f)
         #searchResultByTitle = [i for i in data['films'] if i['titre'] == movie][0]
         testList = list(filter(lambda movieList: movieList['titre'] == movie, data['films']))
-        print(testList,'-----------------------/')
-        
+
+        print('testList',testList)
         
         if testList:
-            print('-----------200----------------')
             print('Case title')
-            print(testList)
             return Response(json.dumps(testList), status=200, mimetype="application/json")
         if len(testList) == 0:
             print('-----------404----------------')
-            return Response('{"Info": "No data!"}',status=404,mimetype="application/json")
-            for movies in data['films']:
-                if movies['acteurs'][0]['nom'] == movie:
-                    myList=movies
-                    print('mysLise',myList)
-                print('Case actor')
-                print(myList)
+            #return Response('{"Info": "No data!"}',status=404,mimetype="application/json")
+            films = data["films"]
+            matching_films = []
 
-                if myList:
-                    return Response(json.dumps(myList), status=200, mimetype="application/json")
+            for film in films:
+                for actor in film["acteurs"]:
+                    if actor["nom"] == movie:
+                        matching_films.append(film)
+                        
+            #return Response(json.dumps(matching_films), status=200, mimetype="application/json")
+            if matching_films:
+                return Response(json.dumps(matching_films), status=200, mimetype="application/json")
             else:
                 print('No DATA...')
                 return Response('{"Info": "No data!"}',status=404,mimetype="application/json")

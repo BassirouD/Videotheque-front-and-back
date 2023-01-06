@@ -161,6 +161,7 @@ def searchmovie(filename='test',):
         data = json.loads(r.content.decode())
         print('--------statuis--->:', r.status_code)
         if r.status_code == 200:
+            print(data)
             return render_template('search.html', data=data)
         if r.status_code == 404:
             print('--------------404----------------------', dataMovies)
