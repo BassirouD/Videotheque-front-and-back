@@ -44,7 +44,6 @@ def create_videotheque():
 @app.route("/api/deleteVideotheque/<filename>", methods=['DELETE'])
 def delete_videotheque(filename):
     try:
-        print(filename)
         #filename = request.json['filename']
         os.remove('videotheque/'+filename)
         return Response('{"success": "File deleted successfully!"}',status=201,mimetype="application/json")
@@ -198,24 +197,24 @@ def update_movie(filename, titre):
     print('titre: ', titre)
     try:
         #title = request.form['title']
+        acteurs = list(map(
+            lambda fullName: get_person_infos_from_fullname(fullName),
+            request.form['acteurs'].split('-')))
+        print('mesActeurs',acteurs)
         ntitre = request.form['ntitre']
         nannee = request.form['nannee']
         nnomR = request.form['nnomR']
         nprenomR = request.form['nprenomR']
-        
-
         with open(f'videotheque/{filename}', 'r') as f:
             data = json.load(f)
         f.close()
-
         listFilms = data['films']
-
         datafound = [i for i in data['films'] if i['titre'] == titre][0]
-
         datafound['titre'] = ntitre
         datafound['annee'] = nannee
         datafound['realisateur']['nom'] = nnomR
         datafound['realisateur']['prenom'] = nprenomR
+        datafound['acteurs']=acteurs
 
         with open(f'videotheque/{filename}', 'w') as f:
             json.dump(data, f, indent=4)

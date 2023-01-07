@@ -13,21 +13,21 @@
             },
             "acteurs": [
                 {
-                    "nom": "Boseman",
-                    "prenom": "Chadwick"
+                    "nom": "Chadwick",
+                    "prenom": "Boseman"
                 },
                 {
-                    "nom": "Uma",
-                    "prenom": "Thurman"
+                    "nom": "Thurman",
+                    "prenom": "Uma"
                 },
                 {
-                    "nom": "HIHI",
-                    "prenom": "SAHA"
+                    "nom": "KOI",
+                    "prenom": "KOI"
                 }
             ]
         },
         {
-            "titre": "Loal titre thow",
+            "titre": "Les thunder man",
             "annee": "4100",
             "realisateur": {
                 "nom": "Sall",
@@ -45,6 +45,24 @@
                 {
                     "nom": "Loka",
                     "prenom": "SAHA"
+                }
+            ]
+        },
+        {
+            "titre": "Tirailleurs",
+            "annee": "2023",
+            "realisateur": {
+                "nom": "Dione",
+                "prenom": "Aliou"
+            },
+            "acteurs": [
+                {
+                    "nom": "Sy",
+                    "prenom": "Omar"
+                },
+                {
+                    "nom": "Soul",
+                    "prenom": "Big"
                 }
             ]
         }

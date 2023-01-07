@@ -50,10 +50,15 @@
                                 <label for="exampleInputPassword1">Prénom réalisateur</label>
                                 <input type="text" class="form-control" id="exampleInputPassword1" name="prenomR">
                             </div>
-                            <div class="form-group col-md-10">
-                                <label for="exampleInputPassword1">Acteurs</label>
-                                <textarea type="text" class="form-control" id="exampleInputPassword1" name="acteurs"></textarea>
-                                Séparer par des tirets(-)
+                            <label for="actors">Acteurs :</label>
+                            <div id="actors_container">
+                                <div>
+                                    <label for="actor_name">Nom :</label>
+                                    <input type="text" name="actor_name" required>
+                                    <label for="actor_first_name">Prénom :</label>
+                                    <input type="text" name="actor_first_name" required>
+                                    <button type="button" id="add_actor_button">+</button>
+                                </div>
                             </div>
                             <button class="btn btn-primary" type="submit">Submit</button>
                         </form>
@@ -71,15 +76,36 @@
 <script src="https://code.jquery.com/jquery-3.6.2.js"></script>
 
 <script>
-    
 
-    function send() {
-        $.ajax({
-            type: "POST",
-            url: "{{ url_for('createVideo') }}",
-            data: {"name": "Jim"}
-        })
-    }
+const addActorButton = document.getElementById("add_actor_button");
+const actorsContainer = document.getElementById("actors_container");
 
+addActorButton.addEventListener("click", () => {
+  const actorNameInput = document.createElement("input");
+  actorNameInput.type = "text";
+  actorNameInput.name = "actor_name";
+  actorNameInput.required = true;
+
+  const actorFirstNameInput = document.createElement("input");
+  actorFirstNameInput.type = "text";
+  actorFirstNameInput.name = "actor_first_name";
+  actorFirstNameInput.required = true;
+
+  const removeActorButton = document.createElement("button");
+  removeActorButton.type = "button";
+  removeActorButton.textContent = "-";
+
+  const actorContainer = document.createElement("div");
+  actorContainer.appendChild(actorNameInput);
+  actorContainer.appendChild(actorFirstNameInput);
+  actorContainer.appendChild(removeActorButton);
+
+  actorsContainer.appendChild(actorContainer);
+
+  removeActorButton.addEventListener("click", () => {
+    actorContainer.remove();
+  });
+});
 
 </script>
+

@@ -203,20 +203,25 @@ def updatemovie(filename='test', titre='test'):
     ))
     for nom, prenom in zip(listnomA, listPrenomA):
        # print(nom, prenom)
-        
         maListActeur.append(nom)
         maListActeur.append(prenom)
     
     maStr=' '.join(maListActeur)
+    
+    names = maStr.split()
+    formatted_name = names[0] + " " + names[1]
+    for i in range(2, len(names), 2):
+        formatted_name += "-" + names[i] + " " + names[i+1]
 
+    print('formatted_name',formatted_name)
     #acteurs=list(map(lambda l1, l2: get_person_infos_from_tuple(l1,l2),listnomA, listPrenomA))
-    print(maListActeur)
-    print('---------------------------------------------------------------------------------------------------------------------------------')
+
     payload = {
         'ntitre': request.form['ntitre'], 
         'nannee': request.form['nannee'], 
         'nnomR': request.form['nnomR'], 
-        'nprenomR': request.form['nprenomR']
+        'nprenomR': request.form['nprenomR'],
+        'acteurs': formatted_name
     }
     url = 'http://127.0.0.1:5001/api/updateMovie/'+filename+'/'+titre
     r = requests.post(url, data = payload)
@@ -230,3 +235,9 @@ def check_regex(entree: str):
         return True
     else:
         return False
+
+
+
+@app.route('/test', methods=['GET','POST'])
+def testForm():
+    return render_template('testForm.html')
