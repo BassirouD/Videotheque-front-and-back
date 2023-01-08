@@ -5,28 +5,6 @@
     },
     "films": [
         {
-            "titre": "Loal titre",
-            "annee": "2005",
-            "realisateur": {
-                "nom": "Sall",
-                "prenom": "Abdou"
-            },
-            "acteurs": [
-                {
-                    "nom": "Chadwick",
-                    "prenom": "Boseman"
-                },
-                {
-                    "nom": "Thurman",
-                    "prenom": "Uma"
-                },
-                {
-                    "nom": "KOI",
-                    "prenom": "KOI"
-                }
-            ]
-        },
-        {
             "titre": "Les thunder man",
             "annee": "4100",
             "realisateur": {
