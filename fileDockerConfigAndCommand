@@ -1,0 +1,33 @@
+Web
+	requirements
+		flask
+		requests
+
+	docker file config
+		FROM python:3-alpine3.17
+		WORKDIR /app
+		COPY . /app
+		RUN pip install -r requirements.txt
+		EXPOSE 5000
+		CMD [ "python3" , "./app.py" ]
+
+
+api
+	requirements
+		flask
+		requests
+		flask_cors
+
+	docker file config
+		FROM python:3-alpine3.15
+		WORKDIR /app
+		COPY . /app
+		RUN pip install -r requirements.txt
+		EXPOSE 5001
+		CMD [ "python3" , "./VideoAPI.py" ]
+
+
+sudo docker build -t apis_flak .
+sudo docker build -t web_flak .
+sudo docker run -p 5001:5001 apis_flak
+sudo docker run -p 5000:5000 web_flak
