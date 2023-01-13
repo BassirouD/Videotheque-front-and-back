@@ -1,9 +1,6 @@
-FROM alpine:latest
-RUN apk update
-RUN apk add py-pip
-RUN apk add --no-cache python3-dev 
-RUN pip install --upgrade pip
+FROM python:3-alpine3.15
 WORKDIR /app
 COPY . /app
-RUN pip --no-cache-dir install -r requirements.txt
-CMD ["python3", "VideoAPI.py"]
+RUN pip install -r requirements.txt
+EXPOSE 5001
+CMD [ "python3" , "./VideoAPI.py" ]

@@ -34,7 +34,7 @@ def createVideo():
         
         if ifPatNom & ifPatprenom & ifPatFileName:
             if nom and prenom and filename:
-                r = requests.post('http://127.0.0.1:5001/api/createVideotheque',data=payload)
+                r = requests.post('http://192.168.139.145:5001/api/createVideotheque',data=payload)
                 #print('------R----------', r.status_code)
                 if r.status_code == 201:
                     flash('Vidéothèque créée avec success')
@@ -59,7 +59,7 @@ def home(filename='test'):
     global films
     global selected_videotheque
     global dataMovies
-    r = requests.get('http://127.0.0.1:5001/api/getAllMovies/'+filename)
+    r = requests.get('http://192.168.139.145:5001/api/getAllMovies/'+filename)
     data = json.loads(r.content.decode())
     films = data['films']
     dataMovies = data
@@ -97,7 +97,7 @@ def addmovie(filename='test'):
             'prenomR': request.form['prenomR'],
             'acteurs': request.form['acteurs']
         }
-        r = requests.post('http://127.0.0.1:5001/api/addFilms/' + selected_videotheque,data=payload)
+        r = requests.post('http://192.168.139.145:5001/api/addFilms/' + selected_videotheque,data=payload)
 
         #headers = {'accept': 'application/json'}
         #r = requests.post('http://127.0.0.1:5001/api/addFilms/' + selected_videotheque,json=acteurs)
@@ -109,7 +109,7 @@ def addmovie(filename='test'):
 @app.route('/getAllVideotheque')
 def getAllVideotheque():
     global videotheques
-    r = requests.get('http://127.0.0.1:5001/api/getAllVideotheque')
+    r = requests.get('http://192.168.139.145:5001/api/getAllVideotheque')
     #print(r.content.decode())
     data = json.loads(r.content.decode())
     videotheques = data
@@ -128,7 +128,7 @@ def select_videotheque(videotheque=''):
 @app.route('/deletevideotheque/<filename>')
 def deletevideotheque(filename):
     #print('filename: ',filename)
-    r = requests.delete('http://127.0.0.1:5001/api/deleteVideotheque/'+filename)
+    r = requests.delete('http://192.168.139.145:5001/api/deleteVideotheque/'+filename)
     #print('r--->:',r)
     return redirect(url_for('getAllVideotheque'))
 
@@ -136,7 +136,7 @@ def deletevideotheque(filename):
 def deletemovie(filename, titre):
     #print('filename: ', filename)
     #print('titre: ', titre)
-    r = requests.delete('http://127.0.0.1:5001/api/deleteMovie/' + filename+ '/' + titre)
+    r = requests.delete('http://192.168.139.145:5001/api/deleteMovie/' + filename+ '/' + titre)
     #print('r--->:',r)
     return redirect(url_for('home', filename=filename))
 
@@ -156,7 +156,7 @@ def searchmovie(filename='test',):
         payload = {
             'title': strTitle, 
         }
-        url='http://127.0.0.1:5001/api/searchmovieTest/'+filename
+        url='http://192.168.139.145:5001/api/searchmovieTest/'+filename
         r = requests.post(url, data=payload)
         data = json.loads(r.content.decode())
         print('--------statuis--->:', r.status_code)
@@ -223,7 +223,7 @@ def updatemovie(filename='test', titre='test'):
         'nprenomR': request.form['nprenomR'],
         'acteurs': formatted_name
     }
-    url = 'http://127.0.0.1:5001/api/updateMovie/'+filename+'/'+titre
+    url = 'http://192.168.139.145:5001/api/updateMovie/'+filename+'/'+titre
     r = requests.post(url, data = payload)
     flash('Film modifié avec succès', 'success')
     return redirect(url_for('home', filename=filename))
@@ -241,3 +241,8 @@ def check_regex(entree: str):
 @app.route('/test', methods=['GET','POST'])
 def testForm():
     return render_template('testForm.html')
+
+
+
+if __name__ == '__main__':
+   app.run(debug = True, host='0.0.0.0', port=int('5000'))

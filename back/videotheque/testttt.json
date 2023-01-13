@@ -1,0 +1,22 @@
+{
+    "proprietaire": {
+        "nom": "reda",
+        "prenom": "reda"
+    },
+    "films": [
+        {
+            "titre": "tarr",
+            "annee": "2030",
+            "realisateur": {
+                "nom": "pas",
+                "prenom": "pas"
+            },
+            "acteurs": [
+                {
+                    "nom": "mohand",
+                    "prenom": "koi"
+                }
+            ]
+        }
+    ]
+}

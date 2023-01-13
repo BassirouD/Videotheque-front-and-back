@@ -238,3 +238,7 @@ def getallvideotheque():
 def get_person_infos_from_fullname(fullname:str):
     firstName, lastname = fullname.split(' ')
     return {'nom': lastname, 'prenom': firstName}
+
+
+if __name__ == '__main__':
+   app.run(debug = True, host='0.0.0.0', port=int('5001'))
