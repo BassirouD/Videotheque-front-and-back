@@ -11,6 +11,7 @@ films = []
 videotheques = []
 selected_videotheque = ''
 dataMovies = []
+host='http://10.11.5.241:5001/api'
 
 @app.route('/')
 def inscription():
@@ -19,6 +20,7 @@ def inscription():
 @app.route('/createVideo', methods=['POST'])
 def createVideo():
     error = None
+    global host
     if request.method=='POST':
         nom = request.form['nomP']
         prenom = request.form['prenomP']
@@ -34,7 +36,7 @@ def createVideo():
         
         if ifPatNom & ifPatprenom & ifPatFileName:
             if nom and prenom and filename:
-                r = requests.post('http://192.168.139.145:5001/api/createVideotheque',data=payload)
+                r = requests.post(host+'/createVideotheque',data=payload)
                 #print('------R----------', r.status_code)
                 if r.status_code == 201:
                     flash('Vidéothèque créée avec success')
@@ -59,7 +61,8 @@ def home(filename='test'):
     global films
     global selected_videotheque
     global dataMovies
-    r = requests.get('http://192.168.139.145:5001/api/getAllMovies/'+filename)
+    global host
+    r = requests.get(host+'/getAllMovies/'+filename)
     data = json.loads(r.content.decode())
     films = data['films']
     dataMovies = data
@@ -84,6 +87,7 @@ def get_person_infos_from_fullname(fullname:str):
 @app.route('/addmovie/<filename>', methods=['GET','POST'])
 def addmovie(filename='test'):
     global selected_videotheque
+    global host
     if request.method == 'POST':
         #acteurs = list(map(
             #lambda fullName: get_person_infos_from_fullname(fullName),
@@ -97,7 +101,7 @@ def addmovie(filename='test'):
             'prenomR': request.form['prenomR'],
             'acteurs': request.form['acteurs']
         }
-        r = requests.post('http://192.168.139.145:5001/api/addFilms/' + selected_videotheque,data=payload)
+        r = requests.post(host+'/addFilms/' + selected_videotheque,data=payload)
 
         #headers = {'accept': 'application/json'}
         #r = requests.post('http://127.0.0.1:5001/api/addFilms/' + selected_videotheque,json=acteurs)
@@ -109,7 +113,8 @@ def addmovie(filename='test'):
 @app.route('/getAllVideotheque')
 def getAllVideotheque():
     global videotheques
-    r = requests.get('http://192.168.139.145:5001/api/getAllVideotheque')
+    global host
+    r = requests.get(host+'/getAllVideotheque')
     #print(r.content.decode())
     data = json.loads(r.content.decode())
     videotheques = data
@@ -127,16 +132,18 @@ def select_videotheque(videotheque=''):
 
 @app.route('/deletevideotheque/<filename>')
 def deletevideotheque(filename):
+    global host
     #print('filename: ',filename)
-    r = requests.delete('http://192.168.139.145:5001/api/deleteVideotheque/'+filename)
+    r = requests.delete(host+'/deleteVideotheque/'+filename)
     #print('r--->:',r)
     return redirect(url_for('getAllVideotheque'))
 
 @app.route('/deletemovie/<filename>/<titre>')
 def deletemovie(filename, titre):
+    global host
     #print('filename: ', filename)
     #print('titre: ', titre)
-    r = requests.delete('http://192.168.139.145:5001/api/deleteMovie/' + filename+ '/' + titre)
+    r = requests.delete(host+'/deleteMovie/' + filename+ '/' + titre)
     #print('r--->:',r)
     return redirect(url_for('home', filename=filename))
 
@@ -145,6 +152,7 @@ def searchmovie(filename='test',):
     global films
     global selected_videotheque
     global dataMovies
+    global host
     title = request.form['title'],
     strTitle = ''.join(title)
     print('filename: ', filename)
@@ -156,7 +164,7 @@ def searchmovie(filename='test',):
         payload = {
             'title': strTitle, 
         }
-        url='http://192.168.139.145:5001/api/searchmovieTest/'+filename
+        url=host+'/searchmovieTest/'+filename
         r = requests.post(url, data=payload)
         data = json.loads(r.content.decode())
         print('--------statuis--->:', r.status_code)
@@ -166,7 +174,7 @@ def searchmovie(filename='test',):
         if r.status_code == 404:
             print('--------------404----------------------', dataMovies)
             print('---------------ici--------------------')
-            r = requests.get('http://127.0.0.1:5001/api/getAllMovies/'+filename)
+            r = requests.get(host+'/getAllMovies/'+filename)
             #data = json.loads(r.content.decode())
             #films = data['films']
             #data['selected_videotheque'] = selected_videotheque
@@ -187,6 +195,7 @@ def get_person_infos_from_tuple(list1, list2):
 
 @app.route('/updatemovie/<filename>/<titre>', methods=['GET','POST'])
 def updatemovie(filename='test', titre='test'):
+    global host
     #print('filename: ', filename)
     #print('titre: ', titre)
     print('---------------------------------------')
@@ -223,7 +232,7 @@ def updatemovie(filename='test', titre='test'):
         'nprenomR': request.form['nprenomR'],
         'acteurs': formatted_name
     }
-    url = 'http://192.168.139.145:5001/api/updateMovie/'+filename+'/'+titre
+    url = host+'/updateMovie/'+filename+'/'+titre
     r = requests.post(url, data = payload)
     flash('Film modifié avec succès', 'success')
     return redirect(url_for('home', filename=filename))
