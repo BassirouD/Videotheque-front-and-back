@@ -1,0 +1,588 @@
+==============================================================================================================================================
+================================Serveur=======================================================
+
+=====================
+==>MQTT serveur code |
+=====================
+
+
+import paho.mqtt.client as paho
+import sys
+import json
+import os
+
+class Package:
+    def __init__(self, package_id):
+        self.package_id = package_id
+        self.tracking_session = TrackingSession(package_id)
+        self.connector = Connector()
+        self.mobile_app = MobileApp()
+
+
+listOC = []
+listSession = []
+
+def initalistion(package_id):
+    global listOC
+    global listSession
+    myObect = ObjectConnecte(package_id)
+    session = TrackingSession(package_id)
+    listOC.append(myObect)
+    listSession.append(session)
+
+class ObjectConnecte:
+    def __init__(self, package_id):
+        self.package_id = package_id
+        self.tracking_session = TrackingSession(package_id)
+        #self.connector = Connector()
+        #self.mobile_app = MobileApp()
+
+class TrackingSession:
+    def __init__(self, package_id):
+        # Create a new tracking session for the given package
+        self.package_id = package_id
+        self.server.create_tracking_session(package_id)
+
+    def update(self, location):
+        # Update the tracking session with the latest location information
+        self.server.update_tracking_session(self.package_id, location)
+
+    def close(self):
+        # Close the tracking session and archive the data
+        self.server.close_tracking_session(self.package_id)
+
+class Server:
+    def create_tracking_session(self, package_id):
+        # Create a new tracking session for the package in the database
+        tracking_session = TrackingSession(package_id)
+        self.db.add(tracking_session)
+
+    def update_tracking_session(self, package_id, location):
+        # Update the tracking session with the latest location information
+        tracking_session = self.db.get(package_id)
+        tracking_session.update(location)
+
+    def close_tracking_session(self, package_id):
+        # Close the tracking session and archive the data
+        tracking_session = self.db.get(package_id)
+        tracking_session.close()
+        self.db.remove(tracking_session)
+
+def onMessage(client, userdata, msg):
+    #print(msg.topic + ': ' + msg.payload.decode())
+    mon_topic=msg.topic
+    message=msg.payload.decode()
+    print('Le messages --------------------', message)
+    if msg.topic == 'UProd':
+        data_load = json.loads(message)
+        print('Nouveau coli: ', message)
+        add_sessions(data_load)
+        #add_sessions('type data load:', data_load)
+    if msg.topic == 'en0':
+        data_load = json.loads(message)
+        update_session(data_load['id'], data_load['location'])
+    if msg.topic == 'en02':
+        data_load = json.loads(message)
+        update_session(data_load['id'], data_load['location'])
+    if msg.topic == 'en03':
+        data_load = json.loads(message)
+        update_session(data_load['id'], data_load['location'])
+    if msg.topic == 'endSession':
+        print('typeDara:',type(message))
+        convertData=int(message)
+        print('typeDara---->:',type(convertData))
+        delete_session(convertData)
+        print('Coli dans: ', convertData)
+
+def tostart():
+    createDatabase()
+    client = paho.Client()
+    client.on_message = onMessage
+    if client.connect('10.0.3.207', 6001, 60) != 0:
+        print('Could no connect to MQTT Broker')
+        sys.exit(-1)
+
+    client.subscribe('UProd')
+    client.subscribe('en0')
+    client.subscribe('en02')
+    client.subscribe('en03')
+    client.subscribe('endSession')
+
+    try:
+        print('Press CTRL to exit...')
+        client.loop_forever()
+    except:
+        print('Disconnecting from broker')
+
+
+    client.disconnect()
+
+def createDatabase():
+    try:
+        isExist = os.path.exists('database/sessions.json')
+        if not isExist:
+            data = {'sessions': []}
+            with open('database/sessions.json', 'w') as f:
+                json.dump(data, f, indent=4)
+    except Exception as e:
+        print(e)
+
+def add_sessions(data):
+    with open('database/sessions.json', 'r') as f:
+        all_data = json.load(f)
+
+    all_sessions = all_data['sessions']
+    for i in all_sessions:
+        print('boucle:', i)
+    session_exists = any(session["id"] == data['id'] for session in all_data["sessions"])
+    if session_exists == False:
+        all_sessions.append(data)
+
+    with open('database/sessions.json', 'w') as f:
+        json.dump(all_data, f, indent=4)
+
+def update_session(id, location):
+    with open('database/sessions.json', 'r') as f:
+        all_data = json.load(f)
+
+    all_sessions = all_data['sessions']
+    sessionfound = [i for i in all_sessions if i['id'] == id][0]
+    print('session a update:', sessionfound)
+    sessionfound['location'] = location
+
+    with open('database/sessions.json', 'w') as f:
+        json.dump(all_data, f, indent=4)
+
+def delete_session(id: int):
+    print('dans delete:',id)
+    with open('database/sessions.json', 'r') as f:
+        all_data = json.load(f)
+    f.close()
+
+    all_sessions = all_data['sessions']
+    sessionfound = [i for i in all_sessions if not (i['id'] == id)]
+    all_data['sessions'] = sessionfound
+
+    print(sessionfound)
+
+    with open('database/sessions.json', 'w') as f:
+        json.dump(all_data, f, indent=4)
+
+
+tostart()
+==================================================================================++++++++++++++++++++++++++++++++++++++++++-----------------------
+
+=====================
+==>AMQP serveur code |
+=====================
+#!/usr/bin/env python
+import pika, os, time
+import sys
+import json
+import os
+
+def pdf_process_function(msg):
+  data_load = json.loads(msg)
+  print('data_load===>:', data_load)
+  print('type data_load===>:',type(data_load))
+  print('id===>:', data_load['id'])
+  print('rue===>:', data_load['id'])
+  update_session(data_load['id'], data_load['rue'])
+  time.sleep(5) # delays for 5 seconds
+  print(" PDF process finish");
+  return;
+
+credentials = pika.PlainCredentials('diallo', 'toor')
+parameters = pika.ConnectionParameters('10.0.3.207', 5672, '/',credentials)
+
+connection = pika.BlockingConnection(parameters)
+
+channel = connection.channel() # start a channel
+channel.queue_declare(queue='mobile') # Declare a queue
+
+# create a function which is called on incoming messages
+def callback(ch, method, properties, body):
+  pdf_process_function(body)
+
+# set up subscription on the queue
+channel.basic_consume('mobile',
+  callback,
+  auto_ack=True)
+
+
+def update_session(id, location):
+    with open('database/sessions.json', 'r') as f:
+        all_data = json.load(f)
+
+    all_sessions = all_data['sessions']
+    sessionfound = [i for i in all_sessions if i['id'] == id][0]
+    print('session a update:', sessionfound)
+    sessionfound['location'] = location
+
+    with open('database/sessions.json', 'w') as f:
+        json.dump(all_data, f, indent=4)
+
+
+# start consuming (blocks)
+channel.start_consuming()
+connection.close()
+
+
+================================================================+++++++++++++++++++++++++++++++++---------------------------------------------
+
+==============
+==>API	    |
+==============
+
+# !/usr/bin/env python
+from flask import Flask, request, flash, jsonify, Response
+from flask_cors import CORS
+import os
+import json
+import requests
+
+
+app = Flask(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+@app.route("/api/getAllOC", methods=['GET'])
+def getAllOC():
+    with open('database/sessions.json', 'r') as f:
+        data = json.load(f)
+        return Response(json.dumps(data), status=200, mimetype="application/json")
+
+@app.route("/api/getOCByID", methods=['POST'])
+def getOCByID():
+    idObjet1 = request.form['id']
+    idObjet=int(idObjet1)
+    print('id============>:',idObjet)
+    print('type id============>:',type(idObjet))
+
+    try:
+        with open('database/sessions.json', 'r') as f:
+            data = json.load(f)
+
+        searchObjectByID = [i for i in data['sessions'] if i['id'] == idObjet][0]
+        print(searchObjectByID)
+        return Response(json.dumps(searchObjectByID), status=200, mimetype="application/json")
+
+    except Exception as e:
+        return jsonify({'Error': 'Invalid request'})
+
+
+if __name__ == '__main__':
+   app.run(debug = True, host='0.0.0.0', port=int('9000'))
+
+==================================================================================++++++++++++++******************************************
+
+=============
+==>DATABASE  |
+=============
+
+{
+    "sessions": [
+        {
+            "id": 1,
+            "location": "rue 9"
+        },
+        {
+            "id": 2,
+            "location": "Unite de production"
+        },
+        {
+            "id": 3,
+            "location": "Entrepot 2"
+        },
+        {
+            "id": 4,
+            "location": "rue 9"
+        }
+    ]
+
+}
+
+
+
+
+
+====================================================================================
+=================================Unité de prod======================================
+
+===========
+==>SRV MQTT|
+===========
+
+import paho.mqtt.client as paho
+import sys
+import time
+import json
+import os
+
+client = paho.Client()
+
+def onMessage(client, userdata, msg):
+    #print(msg.topic + ': ' + msg.payload.decode())
+    mon_topic=msg.topic
+    message=msg.payload.decode()
+    print('message-----------', message)
+    print('type message-------', type(message))
+    if message:
+        print('Before Dans con server')
+        conOnServeur(message)
+        print('Nouveau coli: ', message)
+        print('id coli: ', data_load['id'])
+
+def tostart():
+    client = paho.Client()
+    client.on_message = onMessage
+    if client.connect('172.16.10.1', 1000, 60) != 0:
+        print('Could no connect to MQTT Broker')
+        sys.exit(-1)
+    client.subscribe('UProd')
+    try:
+        print('Press CTRL to exit...')
+        client.loop_forever()
+    except:
+        print('Disconnecting from broker')
+    client.disconnect()
+
+def conOnServeur(data):
+    print('Dans con server')
+    if client.connect('10.0.3.207', 6001, 60) != 0:
+        print('Could no connect to MQTT Borker')
+        sys.exit(-1)
+#    json_data = json.dumps(data)
+ #   print('data json', json_data)
+#    print('type data json', type(json_data))
+    client.publish('UProd', payload=data)
+    tostart()
+
+
+if __name__ == '__main__':
+    tostart()
+
+
+
+==================================================================================================
+
+
+====================================================================================
+=================================Entrepot 01========================================
+
+============
+==>SRV MQTT|
+============
+
+import paho.mqtt.client as paho
+import sys
+import time
+import json
+import os
+
+client = paho.Client()
+
+def onMessage(client, userdata, msg):
+    #print(msg.topic + ': ' + msg.payload.decode())
+    mon_topic=msg.topic
+    message=msg.payload.decode()
+    print('message-----------', message)
+    print('type message-------', type(message))
+    if message:
+        print('Before Dans con server')
+        conOnServeur(message)
+        print('Nouveau coli: ', message)
+        print('id coli: ', data_load['id'])
+
+def tostart():
+    client = paho.Client()
+    client.on_message = onMessage
+    if client.connect('172.16.20.1', 1000, 60) != 0:
+        print('Could no connect to MQTT Broker')
+        sys.exit(-1)
+    client.subscribe('en0')
+    try:
+        print('Press CTRL to exit...')
+        client.loop_forever()
+    except:
+        print('Disconnecting from broker')
+    client.disconnect()
+
+def conOnServeur(data):
+    print('Dans con server')
+    if client.connect('10.0.3.207', 6001, 60) != 0:
+        print('Could no connect to MQTT Borker')
+        sys.exit(-1)
+#    json_data = json.dumps(data)
+ #   print('data json', json_data)
+#    print('type data json', type(json_data))
+    client.publish('en0', payload=data)
+    tostart()
+
+
+if __name__ == '__main__':
+    tostart()
+
+
+==================================================================================================
+
+
+====================================================================================
+=================================Entrepot 02========================================
+
+============
+==>SRV MQTT|
+============
+
+import paho.mqtt.client as paho
+import sys
+import time
+import json
+import os
+
+client = paho.Client()
+
+def onMessage(client, userdata, msg):
+    #print(msg.topic + ': ' + msg.payload.decode())
+    mon_topic=msg.topic
+    message=msg.payload.decode()
+    print('message-----------', message)
+    print('type message-------', type(message))
+    if message:
+        print('Before Dans con server')
+        conOnServeur(message)
+        print('Nouveau coli: ', message)
+        print('id coli: ', data_load['id'])
+
+def tostart():
+    client = paho.Client()
+    client.on_message = onMessage
+    if client.connect('172.16.30.1', 1000, 60) != 0:
+        print('Could no connect to MQTT Broker')
+        sys.exit(-1)
+    client.subscribe('en03')
+    try:
+        print('Press CTRL to exit...')
+        client.loop_forever()
+    except:
+        print('Disconnecting from broker')
+    client.disconnect()
+
+def conOnServeur(data):
+    print('Dans con server')
+    if client.connect('10.0.3.207', 6001, 60) != 0:
+        print('Could no connect to MQTT Borker')
+        sys.exit(-1)
+#    json_data = json.dumps(data)
+ #   print('data json', json_data)
+#    print('type data json', type(json_data))
+    client.publish('en03', payload=data)
+    tostart()
+
+
+if __name__ == '__main__':
+    tostart()
+
+
+==================================================================================================
+
+========================================================================================
+=================================Object connecté========================================
+
+import paho.mqtt.client as paho
+import sys
+import time
+import json
+from netifaces import AF_INET, AF_INET6, AF_LINK, AF_PACKET, AF_BRIDGE
+import netifaces as ni
+
+client = paho.Client()
+
+def sendInfo():
+    ip_addr = ni.ifaddresses('eth0')[AF_INET][0]['addr']
+    print(ip_addr)
+    isEnd = False
+    while isEnd == False:
+        if "172.16.10" in ip_addr:
+            print('Dans unité de prod')
+            #conSrvMQTT('172.16.10.1')
+            client.connect('172.16.10.1', 1000, 60)
+            data = {'id': 4, 'location': 'Unite de production'}
+            json_data = json.dumps(data)
+            print('type date:', type(json_data))
+            client.publish('UProd', payload=json_data)
+            time.sleep(5)
+        if "172.16.20" in ip_addr:
+            print('Entrepot 01')
+            client.connect('172.16.20.1', 1000, 60)
+            data = {'id': 4, 'location': 'Entrepot 1'}
+            json_data = json.dumps(data)
+            client.publish('en0', payload=json_data)
+            time.sleep(5)
+        if "172.16.30" in ip_addr:
+            client.connect('172.16.30.1', 1000, 60)
+            #conSrvMQTT('172.16.10.1')
+            data = {'id': 4, 'location': 'Entrepot 2'}
+            json_data = json.dumps(data)
+            client.publish('en03', payload=json_data)
+            #isEnd = True
+            time.sleep(5)
+
+
+def conSrvMQTT(ip):
+    if client.connect(ip, 1000, 60) != 0:
+        print('Could no connect to MQTT Borker')
+        sys.exit(-1)
+    time.sleep(10)
+    sendInfo()
+    client.disconnect()
+
+
+if __name__ == '__main__':
+    sendInfo()
+
+
+==================================================================================================
+
+=========================================================================================
+=================================++++Mobile+++++========================================
+
+
+# !/usr/bin/env python
+import pika
+import time
+import json
+
+def sendInfo():
+    credentials = pika.PlainCredentials('diallo', 'toor')
+    parameters = pika.ConnectionParameters('10.0.3.207', 5672, '/', credentials)
+    connection = pika.BlockingConnection(parameters)
+    channel = connection.channel()
+    print(' [*] Sending positions. To exit press CTRL+C')
+    i = 0
+    #data = {'id': 1, 'rue': '', 'angle': ''}
+    data = {'id': 4, 'rue': ''}
+    while i < 10:
+        data['rue'] = 'rue ' + str(i)
+        #data['angle'] = 'angle ' + str(i)
+        json_data = json.dumps(data)
+        # channel.queue_declare(queue='mobile')
+        channel.basic_publish(exchange='',
+                              routing_key='mobile',
+                              body=json_data)
+        time.sleep(5)
+        i += 1
+    connection.close()
+
+
+def conSrv():
+    sendInfo()
+    # channel.queue_declare(queue='mobile')
+
+    print(" [x] Process end...!'")
+    # connection.close()
+
+
+if __name__ == '__main__':
+    conSrv()
+
+
