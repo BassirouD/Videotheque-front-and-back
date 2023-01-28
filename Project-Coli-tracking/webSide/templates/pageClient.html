@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% include 'headerc.html' %}
+
+{% block title %} {% endblock %}
+
+{% block body %}
+
+    <form action="{{ url_for('getObjectByID') }}" , method="POST">
+        <div class="input-group rounded" style="margin-left: 14%;width: 40%;">
+            <input name="id" type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                   aria-describedby="search-addon"/>
+            <button type="submit" class="btn btn-warning">Chercher</button>
+        </div>
+    </form>
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col md-12">
+                <div class="jumbotron p-3">
+
+
+                    <table class="table table-hover table-dark">
+                        <tr>
+                            <th>ID Objet</th>
+                            <th>Position</th>
+                            <th>Status</th>
+                        </tr>
+
+                        {% if data %}
+
+
+                                <tr>
+                                    <td>{{ data['id'] }}</td>
+                                    <td>{{ data['location'] }}</td>
+                                    <td>En cours</td>
+                                </tr>
+
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
